@@ -1,30 +1,38 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { IntlModule } from '@progress/kendo-angular-intl';
 
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './calendar/calendar.component';
-import { L10N_PREFIX, LocalizationService } from '@progress/kendo-angular-l10n';
-import { IntlModule } from '@progress/kendo-angular-intl';
+import { LocalizationService, L10N_PREFIX } from '@progress/kendo-angular-l10n';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { registerLocaleData } from '@angular/common';
+import localeVi from '@angular/common/locales/vi';
+import { CustomCalendarComponent } from './in-app/in-config/pages/shared/components/custom-calendar/custom-calendar.component';
+import { InConfigComponent } from './in-app/in-config/in-config.component';
+import { Config006CustomCalendarComponent } from './in-app/in-config/pages/config006-custom-calendar/config006-custom-calendar.component';
+
+registerLocaleData(localeVi, 'vi');
+
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    CalendarComponent
-  ],
+  declarations: [AppComponent, CustomCalendarComponent, InConfigComponent, Config006CustomCalendarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     DateInputsModule,
-    IntlModule 
+    IntlModule,
+    DropDownsModule
   ],
   providers: [
     LocalizationService,
-    { provide: L10N_PREFIX, useValue: 'kendo' }  
+    { provide: L10N_PREFIX, useValue: 'kendo' },
+    { provide: LOCALE_ID, useValue: 'vi' } 
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
