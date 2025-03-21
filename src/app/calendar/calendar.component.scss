@@ -1,0 +1,108 @@
+::ng-deep {
+    app-calendar {
+    .container {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .picker-wrapper {
+      .k-picker-wrap {
+        width: 240px;
+      }
+    }
+
+    .k-datepicker .k-input-button,
+    .k-datetimepicker .k-input-button {
+      order: -1;
+    }
+
+    .k-datepicker .k-input-inner,
+    .k-datetimepicker .k-input-inner {
+      order: 2;
+    }
+
+    /* Nút điều hướng */
+    .k-calendar-nav-prev,
+    .k-calendar-nav-next {
+      background-color: #f5f6f8;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      margin: 0 4px;
+    }
+
+    .k-calendar-nav-prev:hover,
+    .k-calendar-nav-next:hover {
+      background-color: #e0e0e0;
+    }
+
+    .k-calendar-nav-prev:active,
+    .k-calendar-nav-next:active {
+      background-color: #ccc;
+    }
+
+    /* Ngày được chọn (màu xanh) */
+    .k-calendar .k-calendar-table td.k-selected .k-link {
+      background-color: #008000 !important;
+      color: #fff !important;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ngày hôm nay (hình tròn xám nhạt) */
+    .k-calendar .k-calendar-view .k-today {
+      background-color: #f5f6f8 !important;
+      border-radius: 50%;
+      color: #000;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Các ngày bị disable (trước minDate) hiển thị màu xám nhạt */
+    .k-calendar .k-calendar-table td.k-disabled .k-link {
+      color: #bbb !important;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Hiệu ứng hover */
+    .k-calendar .k-calendar-table td.k-state-hover .k-link {
+      border: 1px solid #008000;
+      background-color: transparent;
+      border-radius: 50%;
+      color: #008000;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Các ngày của tháng khác bị mờ đi */
+    .k-calendar .k-calendar-table td.k-other-month .k-link {
+      color: rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Bỏ display: none nếu đang bị ẩn */
+    .k-content.k-scrollable,
+    .k-calendar-navigation,
+    .k-calendar-weekdays .k-calendar-table,
+    .k-calendar-thead {
+      display: block !important;
+    }
+  }
+  ::ng-deep .k-calendar-nav-today .k-button-text {
+    display: none !important;
+  }
+  
+}
