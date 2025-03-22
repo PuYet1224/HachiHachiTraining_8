@@ -14,12 +14,13 @@ import localeVi from '@angular/common/locales/vi';
 import { DateTimePickerComponent } from './in-app/in-config/pages/shared/components/custom-calendar/datetimepicker.component';
 import { InConfigComponent } from './in-app/in-config/in-config.component';
 import { Config006CustomCalendarComponent } from './in-app/in-config/pages/config006-custom-calendar/config006-custom-calendar.component';
+import { MonthNameViPipe } from './in-app/in-config/pages/shared/components/custom-calendar/pipes/month-format-pipe/month-name-vi.pipe';
 
 registerLocaleData(localeVi, 'vi');
 
 
 @NgModule({
-  declarations: [AppComponent, DateTimePickerComponent, InConfigComponent, Config006CustomCalendarComponent],
+  declarations: [AppComponent, DateTimePickerComponent, InConfigComponent, Config006CustomCalendarComponent, MonthNameViPipe],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

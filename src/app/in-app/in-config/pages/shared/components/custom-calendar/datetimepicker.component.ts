@@ -32,14 +32,14 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   /**
-   * Hàm dựng
-   * @param intlService - Dịch vụ nội bộ của Kendo để thiết lập ngôn ngữ/locale
+   * Khởi tạo component, thiết lập locale cho Kendo nếu cần.
+   * @param intlService Dịch vụ nội bộ của Kendo (thiết lập ngôn ngữ).
    */
   constructor(private intlService: IntlService) {}
 
   /**
-   * Khi khởi tạo, thiết lập locale="vi" nếu dùng CldrIntlService.
-   * Tạo mảng timeList (48 mốc, mỗi mốc cách 30p).
+   * Thiết lập locale='vi' (nếu dùng CldrIntlService).
+   * Tạo danh sách timeList gồm 48 mốc giờ (mỗi 30 phút).
    */
   ngOnInit(): void {
     if (this.intlService instanceof CldrIntlService) {
@@ -54,9 +54,7 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /**
-   * Hàm khoá những ngày trước hôm nay (không cho chọn)
-   * @param date Ngày
-   * @returns true nếu bị disable, false nếu chọn được
+   * Hàm disable các ngày trước hôm nay (trả về true nếu bị disable).
    */
   disabledDates = (date: Date): boolean => {
     const today = new Date();
@@ -65,16 +63,14 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   };
 
   /**
-   * Khi người dùng tích/bỏ tích "Cả ngày"
-   * - Tích: lưu selectedTime vào previousTime, đặt giờ 00:00, đóng dropdown
-   * - Bỏ tích: khôi phục previousTime nếu có, nếu không thì 00:00
+   * Xử lý khi chọn/bỏ chọn "Cả ngày".
+   * - Nếu chọn: lưu giờ cũ, đặt giờ = 00:00, đóng dropdown.
+   * - Nếu bỏ: khôi phục giờ cũ (nếu có).
    */
   onAllDayChange(): void {
     if (this.allDay) {
       this.previousTime = this.selectedTime;
-      if (this.timeDropdown) {
-        this.timeDropdown.toggle(false);
-      }
+      if (this.timeDropdown) this.timeDropdown.toggle(false);
       const d = this.dateTimeValue;
       this.dateTimeValue = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
       this.selectedTime = null;
@@ -84,34 +80,48 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
         this.combineDateAndTime(this.previousTime);
       } else {
         const d = this.dateTimeValue;
-        const fallbackTime = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
-        this.selectedTime = fallbackTime;
-        this.combineDateAndTime(fallbackTime);
+        const fallback = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
+        this.selectedTime = fallback;
+        this.combineDateAndTime(fallback);
       }
     }
     this.onChange(this.dateTimeValue);
     this.onTouched();
   }
 
-  /**
-   * Chuyển sang chế độ AM và lọc danh sách giờ
-   */
+  /** Đặt chế độ AM rồi lọc lại danh sách giờ. */
   setAM(): void {
+    if (!this.isAM && this.selectedTime) {
+      const h = this.selectedTime.getHours();
+      if (h >= 12) {
+        const newTime = new Date(this.selectedTime);
+        newTime.setHours(h - 12);
+        this.selectedTime = newTime;
+        this.combineDateAndTime(newTime);
+      }
+    }
     this.isAM = true;
     this.filterTimeList();
   }
 
-  /**
-   * Chuyển sang chế độ PM và lọc danh sách giờ
-   */
+  /** Đặt chế độ PM rồi lọc lại danh sách giờ. */
   setPM(): void {
+    if (this.isAM && this.selectedTime) {
+      const h = this.selectedTime.getHours();
+      if (h < 12) {
+        const newTime = new Date(this.selectedTime);
+        newTime.setHours(h + 12);
+        this.selectedTime = newTime;
+        this.combineDateAndTime(newTime);
+      }
+    }
     this.isAM = false;
     this.filterTimeList();
   }
 
   /**
-   * Lọc danh sách timeList thành displayedTimeList theo AM/PM
-   * Nếu selectedTime không thuộc dải mới thì reset
+   * Lọc danh sách timeList theo AM/PM => hiển thị vào displayedTimeList.
+   * Nếu selectedTime không còn hợp lệ, reset nó.
    */
   private filterTimeList(): void {
     this.displayedTimeList = this.isAM
@@ -132,8 +142,8 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /**
-   * Lắng nghe sự kiện valueChange của kendo-dropdownlist
-   * Gán selectedTime = value, rồi gộp với dateTimeValue
+   * Khi dropdown thay đổi giờ => gộp giờ mới vào dateTimeValue.
+   * @param value Mốc giờ mới được chọn.
    */
   onTimeDropdownChange(value: Date): void {
     this.selectedTime = value;
@@ -141,7 +151,7 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /**
-   * Gộp giờ (time) với ngày cũ (dateTimeValue) => tạo dateTimeValue mới
+   * Gộp giờ từ `time` vào ngày cũ (dateTimeValue) => cập nhật dateTimeValue.
    */
   private combineDateAndTime(time: Date): void {
     const old = this.dateTimeValue || new Date();
@@ -158,27 +168,60 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   /**
-   * Khi DatePicker thứ 2 thay đổi ngày
-   * Giữ nguyên giờ/phút cũ, chỉ thay day/month/year
+   * Khi DatePicker (thứ 2) thay đổi ngày => giữ nguyên giờ cũ.
+   * @param date Ngày mới (được chọn).
    */
   onDateTimeChange(date: Date): void {
     const oldH = this.dateTimeValue.getHours();
     const oldM = this.dateTimeValue.getMinutes();
-    this.dateTimeValue = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      oldH,
-      oldM,
-      0
-    );
+    this.dateTimeValue = new Date(date.getFullYear(), date.getMonth(), date.getDate(), oldH, oldM, 0);
     this.onChange(this.dateTimeValue);
     this.onTouched();
   }
 
   /**
-   * Gán giá trị từ ngoài vào (ControlValueAccessor)
-   * Xác định AM/PM => lọc => tìm selectedTime khớp
+   * Lấy nhãn hiển thị cho view thập kỷ (ví dụ: "2020 - 2029").
+   * @param date Biến date do Kendo truyền vào (Date hoặc string).
+   */
+  public getDecadeLabel(date: any): string {
+    if (date instanceof Date) {
+      const y = date.getFullYear();
+      const start = Math.floor(y / 10) * 10;
+      return `${start} - ${start + 9}`;
+    }
+    if (typeof date === 'string') {
+      const y = parseInt(date, 10);
+      if (!isNaN(y)) {
+        const start = Math.floor(y / 10) * 10;
+        return `${start} - ${start + 9}`;
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Lấy nhãn hiển thị cho view thế kỷ (ví dụ: "2000 - 2090").
+   * @param date Biến date do Kendo truyền vào (Date hoặc string).
+   */
+  public getCenturyLabel(date: any): string {
+    if (date instanceof Date) {
+      const y = date.getFullYear();
+      const start = Math.floor(y / 100) * 100;
+      return `${start} - ${start + 90}`;
+    }
+    if (typeof date === 'string') {
+      const y = parseInt(date, 10);
+      if (!isNaN(y)) {
+        const start = Math.floor(y / 100) * 100;
+        return `${start} - ${start + 90}`;
+      }
+    }
+    return '';
+  }
+
+  /**
+   * ControlValueAccessor: Gán giá trị từ formControl vào component.
+   * @param value Giá trị Date hoặc null.
    */
   writeValue(value: Date | null): void {
     if (value) {
@@ -192,27 +235,21 @@ export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  /**
-   * Lưu callback onchange cho form (ControlValueAccessor)
-   */
+  /** ControlValueAccessor: Đăng ký callback onChange. */
   registerOnChange(fn: (val: Date | null) => void): void {
     this.onChange = fn;
   }
 
-  /**
-   * Lưu callback ontouched cho form (ControlValueAccessor)
-   */
+  /** ControlValueAccessor: Đăng ký callback onTouched. */
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  /**
-   * Khi form muốn disable component
-   */
+  /** ControlValueAccessor: Khi muốn disable component (tạm không dùng). */
   setDisabledState?(isDisabled: boolean): void {}
 
   /**
-   * Log khi DatePicker2 thay đổi, mở/đóng/blur/focus ...
+   * Các hàm log khi DatePicker mở/đóng/focus/blur (nếu cần).
    */
   onOpen(source: string): void {
     console.log(`${source} opened`);

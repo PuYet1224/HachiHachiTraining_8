@@ -1,41 +1,75 @@
 <div class="container">
-    <div class="picker-wrapper">
-      <kendo-datepicker
-        [(ngModel)]="dateOnlyValue"
-        (close)="onClose('DatePicker')"
-        (blur)="onBlur('DatePicker')"
-        (focus)="onFocus('DatePicker')"
-        (open)="onOpen('DatePicker')"
-        [footer]="false"
-        calendarType="classic"
-        [disabledDates]="disabledDates"
-        [showOtherMonthDays]="false"
+  <div class="picker-wrapper">
+    <kendo-datepicker
+      [(ngModel)]="dateOnlyValue"
+      (close)="onClose('DatePicker')"
+      (blur)="onBlur('DatePicker')"
+      (focus)="onFocus('DatePicker')"
+      (open)="onOpen('DatePicker')"
+      [footer]="false"
+      calendarType="classic"
+      [disabledDates]="disabledDates"
+      [showOtherMonthDays]="false"
+    >
+      <ng-template 
+        kendoCalendarHeaderTitleTemplate 
+        let-date 
+        let-activeView="activeView"
       >
-      </kendo-datepicker>
-    </div>
-  
-    <div class="datetimepicker-wrapper">
-      <kendo-datepicker
-        [(ngModel)]="dateTimeValue"
-        [format]="allDay ? 'dd/MM/yyyy' : 'dd/MM/yyyy HH:mm'"
-        [calendarType]="'classic'"
-        [showOtherMonthDays]="false"
-        [disabledDates]="disabledDates"
-        [footer]="true"
-        (valueChange)="onDateTimeChange($event)"
-        (open)="onOpen('DatePicker2')"
-        (close)="onClose('DatePicker2')"
-        (focus)="onFocus('DatePicker2')"
-        (blur)="onBlur('DatePicker2')"
+        <span *ngIf="activeView === 'month'">
+          {{ date | monthFormat }}
+        </span>
+        <span *ngIf="activeView === 'year'">
+          {{ date | date:'yyyy' }}
+        </span>
+        <span *ngIf="activeView === 'decade'">
+          {{ getDecadeLabel(date) }}
+        </span>
+        <span *ngIf="activeView === 'century'">
+          {{ getCenturyLabel(date) }}
+        </span>
+      </ng-template>
+    </kendo-datepicker>
+  </div>
+
+  <div class="datetimepicker-wrapper">
+    <kendo-datepicker
+      [(ngModel)]="dateTimeValue"
+      [format]="allDay ? 'dd/MM/yyyy' : 'dd/MM/yyyy HH:mm'"
+      [calendarType]="'classic'"
+      [showOtherMonthDays]="false"
+      [disabledDates]="disabledDates"
+      [footer]="true"
+      (valueChange)="onDateTimeChange($event)"
+      (open)="onOpen('DatePicker2')"
+      (close)="onClose('DatePicker2')"
+      (focus)="onFocus('DatePicker2')"
+      (blur)="onBlur('DatePicker2')"
+    >
+      <ng-template 
+        kendoCalendarHeaderTitleTemplate 
+        let-date 
+        let-activeView="activeView"
       >
+        <span *ngIf="activeView === 'month'">
+          {{ date | monthFormat }}
+        </span>
+        <span *ngIf="activeView === 'year'">
+          {{ date | date:'yyyy' }}
+        </span>
+        <span *ngIf="activeView === 'decade'">
+          {{ getDecadeLabel(date) }}
+        </span>
+        <span *ngIf="activeView === 'century'">
+          {{ getCenturyLabel(date) }}
+        </span>
+      </ng-template>
       <ng-template kendoCalendarFooterTemplate>
         <div class="custom-footer">
           <label class="all-day-label">
             <input type="checkbox" [(ngModel)]="allDay" (change)="onAllDayChange()" />
             Cả ngày
           </label>
-      
-          <!-- Bỏ dropdown và AM/PM chung vào 1 container -->
           <div class="time-control">
             <kendo-dropdownlist
               #timeDropdown="kendoDropDownList"
@@ -52,16 +86,28 @@
                 {{ time | date:'HH:mm' }}
               </ng-template>
             </kendo-dropdownlist>
-      
+
             <div class="am-pm-buttons">
-              <button class="round-button" (click)="setAM()" [disabled]="allDay"
-                      [class.active]="isAM && !allDay">AM</button>
-              <button class="round-button" (click)="setPM()" [disabled]="allDay"
-                      [class.active]="!isAM && !allDay">PM</button>
+              <button
+                class="round-button"
+                (click)="setAM()"
+                [disabled]="allDay"
+                [class.active]="isAM && !allDay"
+              >
+                AM
+              </button>
+              <button
+                class="round-button"
+                (click)="setPM()"
+                [disabled]="allDay"
+                [class.active]="!isAM && !allDay"
+              >
+                PM
+              </button>
             </div>
           </div>
         </div>
       </ng-template>
-      </kendo-datepicker>
-    </div>
+    </kendo-datepicker>
   </div>
+</div>

@@ -1,5 +1,5 @@
 ::ng-deep {
-    app-custom-calendar {
+    app-datetimepicker {
       .container {
         display: flex;
         gap: 2rem;
@@ -63,7 +63,7 @@
       display: none !important;
     }
     .k-calendar-nav {
-      gap: 2px;
+      gap: 6px;
       color: #959DB3;
       margin-right: 20px;
     }
@@ -97,22 +97,22 @@
           appearance: none;
           width: 18px;
           height: 18px;
-          border: 2px solid #008000;
+          border: 1px solid #999999;
           border-radius: 50%;
           cursor: pointer;
           position: relative;
         }
         input[type='checkbox']:checked {
           background-color: #5CB800;
+          border: 1px solid #008000;
         }
         input[type='checkbox']:checked::after {
           content: '✔';
           position: absolute;
           top: -1px;
-          left: 2px;
+          left: 3px;
           width: 10px;
           height: 10px;
-          background-color: #5CB800;
           color: #008000;
           border-radius: 50%;
         }
@@ -199,6 +199,10 @@
     }
       .k-dropdownlist kendo-svgicon.k-svg-i-caret-alt-down > svg {
         display: none !important;
+    }
+    .k-button-flat-primary{
+      color: #5A6276;
+      font-weight: 700;
     }
   }
   
