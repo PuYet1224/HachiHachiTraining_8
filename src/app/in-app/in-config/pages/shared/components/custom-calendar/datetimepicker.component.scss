@@ -197,8 +197,8 @@
       content: "\e015" !important;
       font-family: "WebComponentsIcons";
     }
-    .k-button-md.k-icon-button .k-button-icon.k-svg-icon>svg{
-        display: none;
+      .k-dropdownlist kendo-svgicon.k-svg-i-caret-alt-down > svg {
+        display: none !important;
     }
   }
   

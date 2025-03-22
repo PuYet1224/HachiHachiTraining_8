@@ -4,19 +4,19 @@ import { L10N_PREFIX } from '@progress/kendo-angular-l10n';
 import { IntlService, CldrIntlService } from '@progress/kendo-angular-intl';
 
 @Component({
-  selector: 'app-custom-calendar',
-  templateUrl: './custom-calendar.component.html',
-  styleUrls: ['./custom-calendar.component.scss'],
+  selector: 'app-datetimepicker',
+  templateUrl: './datetimepicker.component.html',
+  styleUrls: ['./datetimepicker.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomCalendarComponent),
+      useExisting: forwardRef(() => DateTimePickerComponent),
       multi: true
     },
     { provide: L10N_PREFIX, useValue: 'kendo.calendar' }
   ]
 })
-export class CustomCalendarComponent implements OnInit, ControlValueAccessor {
+export class DateTimePickerComponent implements OnInit, ControlValueAccessor {
   @ViewChild('timeDropdown') timeDropdown: any;
   minDate = new Date();
   dateOnlyValue = new Date();

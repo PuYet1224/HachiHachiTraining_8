@@ -11,7 +11,7 @@ import { LocalizationService, L10N_PREFIX } from '@progress/kendo-angular-l10n';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { registerLocaleData } from '@angular/common';
 import localeVi from '@angular/common/locales/vi';
-import { CustomCalendarComponent } from './in-app/in-config/pages/shared/components/custom-calendar/custom-calendar.component';
+import { DateTimePickerComponent } from './in-app/in-config/pages/shared/components/custom-calendar/datetimepicker.component';
 import { InConfigComponent } from './in-app/in-config/in-config.component';
 import { Config006CustomCalendarComponent } from './in-app/in-config/pages/config006-custom-calendar/config006-custom-calendar.component';
 
@@ -19,7 +19,7 @@ registerLocaleData(localeVi, 'vi');
 
 
 @NgModule({
-  declarations: [AppComponent, CustomCalendarComponent, InConfigComponent, Config006CustomCalendarComponent],
+  declarations: [AppComponent, DateTimePickerComponent, InConfigComponent, Config006CustomCalendarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
