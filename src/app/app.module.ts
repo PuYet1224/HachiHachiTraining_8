@@ -15,6 +15,8 @@ import { DateTimePickerComponent } from './in-app/in-config/pages/shared/compone
 import { InConfigComponent } from './in-app/in-config/in-config.component';
 import { Config006CustomCalendarComponent } from './in-app/in-config/pages/config006-custom-calendar/config006-custom-calendar.component';
 import { MonthNameViPipe } from './in-app/in-config/pages/shared/components/custom-calendar/pipes/month-format-pipe/month-name-vi.pipe';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
+
 
 registerLocaleData(localeVi, 'vi');
 
@@ -27,7 +29,8 @@ registerLocaleData(localeVi, 'vi');
     FormsModule,
     DateInputsModule,
     IntlModule,
-    DropDownsModule
+    DropDownsModule,
+    DialogsModule
   ],
   providers: [
     LocalizationService,
